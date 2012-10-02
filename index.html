@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>Server network latency monitor</title>
+</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+</head>
+<style>
+body, .sec, div, li {
+  font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+}
+
+.sec {
+  width: 300px;
+  float: left;
+  display: inline-block;
+ 
+}
+</style>
+<body>
+
+<div id="lists"></div>
+
+
+<script>
+var urls = [ 'http://10.2.1.181', 'http://10.2.1.182' ];
+if (window.location.href.indexOf('scripto181')>=0) {
+  var urls = [ 'http://5.42.104.23:8920/ping', 'http://5.50.104.46:8920/ping' ];
+}
+var st = {};
+var elapsed = {};
+
+init = function() {
+  for (var i=0; i< urls.length; i++) {
+    elapsed[urls[i]] = [];
+    setInterval('ping("'+urls[i]+'")', 2500);
+  }
+}
+
+ping = function(url) {
+  st[url] = new Date().getTime();
+  
+  $.get(url, function() {
+    elapsed[url].push(new Date().getTime() - st[url]);
+    display();          
+  });
+}
+
+display = function() {
+  str = '';
+  for (var i=0; i < urls.length; i++) {
+    str += '<div class="sec">' + urls[i] + '<ul>';
+    for (var n=elapsed[urls[i]].length-1; n>=0; n--) {
+      str += '<li>' + elapsed[urls[i]][n] + '</li>';       
+    }
+    str += '</ul></div>';    
+  }  
+  $('#lists').html(str);
+}
+
+$(document).ready(function() {
+  init();
+});
+
+</script>
+</body>
+</html>

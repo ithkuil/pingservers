@@ -1,0 +1,9 @@
+{
+  "name": "monlatency",
+  "description": "",
+  "version": "1.0.0",
+  "author": "Jason Livesay <ithkuil@gmail.com>",
+  "dependencies": {
+    "express": ""
+  }
+}
